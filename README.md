@@ -14,7 +14,7 @@ This repository provides supplementary materials to facilitate reproduction and 
 
 **Journal:** Annals of Biomedical Engineering
 
-**Status:** Under review / Accepted / Published
+**Status:** Under review 
 
 **DOI:** To be added after publication.
 
