@@ -1,0 +1,22 @@
+# Local datasets and generated working directories
+data_root/
+local_data/
+checkpoints/
+runs/
+logs/
+
+# Common medical-image and model-weight artifacts that must be reviewed before release
+*.nii
+*.nii.gz
+*.dcm
+*.pt
+*.pth
+*.ckpt
+
+# Local environment and editor files
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
