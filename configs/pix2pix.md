@@ -1,5 +1,10 @@
 # Pix2Pix configuration
 
+> **Implementation repository.** The experiments used
+> [thepochynsons/pytorch-CycleGAN-and-pix2pix](https://github.com/thepochynsons/pytorch-CycleGAN-and-pix2pix),
+> a research fork of
+> [junyanz/pytorch-CycleGAN-and-pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix).
+
 Pix2Pix is the GAN-based Stage I baseline used to translate semantic label maps into physics-based ultrasound images.
 
 ## Experiment configuration
@@ -26,7 +31,7 @@ Pix2Pix is the GAN-based Stage I baseline used to translate semantic label maps 
 | Weight initialization | Convolution weights sampled from `N(0, 0.02)`; batch-normalization weights sampled from `N(0, 0.02)` and biases set to zero |
 | Random seed | `2023` for Python `random`, NumPy, PyTorch CPU, and the current CUDA device |
 | Training horizon | `max_epochs=2001` (epoch indices `0`--`2000`) |
-| Checkpoint cadence | Every 5 epochs; all periodic 
+| Checkpoint cadence | Every 5 epochs |
 
 The generator consumes the class-index mask directly after conversion to `float`; the mask is neither one-hot encoded nor normalized. The target RGB image is normalized channel-wise with mean `0.5` and standard deviation `0.5`, producing values approximately in `[-1, 1]`. At inference, the `tanh` output is mapped back to `[0, 255]`.
 

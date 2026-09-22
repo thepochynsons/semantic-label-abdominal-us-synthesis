@@ -1,56 +1,68 @@
 # Evaluation protocol
 
-This directory documents how to evaluate the representative or locally regenerated outputs. The implementation used for the paper is not distributed; use equivalent, version-pinned implementations and record the package versions and options used.
+This document describes the evaluation code retained for the ABME26 experiments. It distinguishes paired Stage I evaluation against physics-based targets from unpaired Stage II evaluation against real ultrasound images. 
 
-## Inputs
+## Stage I paired metrics
 
-For every evaluated sample, identify:
+MAE, MSE, PSNR, SSIM, and LPIPS are computed independently for every paired test image with TorchMetrics. The reported summary is the arithmetic mean and sample standard deviation across the 245 images.
 
-- semantic label map;
-- physics-based reference image;
-- generated Stage I image;
-- target image, if the metric requires one;
-- source `patient_id`, `volume_id`, and split.
+| Metric | Retained implementation | Input and parameters | Direction |
+| --- | --- | --- | --- |
+| MAE | `torchmetrics.functional.regression.mean_absolute_error` | RGB float tensor retaining the `[0, 255]` values; mean over channels and pixels | Lower is better |
+| MSE | `torchmetrics.functional.regression.mean_squared_error` | RGB float tensor retaining the `[0, 255]` values; mean over channels and pixels | Lower is better |
+| PSNR | `torchmetrics.image.PeakSignalNoiseRatio` | RGB `[0, 255]`; `data_range=255.0` | Higher is better |
+| SSIM | `torchmetrics.functional.image.structural_similarity_index_measure` | RGB `[0, 1]`; `data_range=1.0`; all window/kernel constants left at TorchMetrics defaults | Higher is better |
+| LPIPS | `torchmetrics.image.lpip.LearnedPerceptualImagePatchSimilarity` | RGB `[0, 1]`; SqueezeNet backbone (`net_type='squeeze'`); `normalize=True` | Lower is better |
 
-Only the test partition should be used for final reported scores. Preserve the same spatial resolution, intensity range, masking convention, and organ labels across all methods being compared.
+### Stage I semantic preservation
 
-## Metrics
+The mIoU implementation is custom PyTorch code. RGB masks are decoded by exact palette matching into the 16 classes documented under [`data/test_labels/`](../data/test_labels/README.md). Unmatched RGB values become background (`0`).
 
-### Morphological and anatomical metrics
+For each image and each class `0`--`15`, IoU is computed as intersection divided by union. A class is omitted from that image's mean only when its union is zero in both prediction and ground truth. Background is included. The final result is the mean and sample standard deviation of the per-image mIoUs.
 
-- **MAE:** mean absolute pixel-wise error.
-- **MSE:** mean squared pixel-wise error.
-- **PSNR:** peak signal-to-noise ratio, with the declared data range.
-- **SSIM:** structural similarity with explicitly recorded window, constants, and data range.
-- **mIoU:** mean intersection over union for semantic/anatomical masks, with the class list and absent-class policy documented.
+The predicted masks are precomputed segmentations of the generated US images. We used Segmenter S, the same segmentation model employed in SG-CycleGAN. Further details are provided in configs/sgcyclegan.md.
 
-### Perceptual and distributional metrics
 
-- **LPIPS:** record the backbone and input normalization.
-- **FID:** record feature extractor, image preprocessing, sample count, and whether statistics are computed per split or from a fixed reference set.
-- **KID:** record feature extractor, subset size, number of subsets, and estimator settings.
+### Stage I FID and KID
 
-### Stage II organ-level echogenicity
+We uses TorchMetrics directly:
+   - `FrechetInceptionDistance(feature=768)`;
+   - `KernelInceptionDistance(feature=768, subset_size=80)`;
+   - RGB `uint8` inputs in `[0, 255]`;
+   - PyTorch seed `123`;
 
-Compute organ-level intensity histograms for the defined anatomical regions and compare generated/refinement outputs using histogram-based chi-squared distances. Record the bin edges, normalization, masking rule, zero-bin handling, organ list, and aggregation rule.
+## Stage II FID and KID
 
-## Reproducible evaluation record
+Stage II FID/KID compare SG-CycleGAN-refined outputs against real polar ultrasound images. The retained method is a custom implementation using a `torch-fidelity` Inception-v3 feature extractor copied from the TorchMetrics `v1.2.1` implementation.
 
-For each run, save a manifest containing:
+### Feature extraction
+
+- Input is RGB `uint8` in `[0, 255]`.
+- Images are resized internally to `299 x 299` using the TensorFlow-1-compatible bilinear interpolation supplied by `torch-fidelity`, with `align_corners=False`.
+- Intensities are normalized as `(x - 128) / 128`.
+- The extractor is `inception-v3-compat` with pretrained `torch-fidelity` weights.
+- Features are taken after `Mixed_6e`, adaptively average-pooled to a 768-dimensional vector.
+- The network is forced into evaluation mode.
+
+This is deliberately not the conventional 2,048-dimensional final-pool FID. Scores are only comparable with evaluations using the same 768-dimensional layer and preprocessing.
+
+## Stage II organ-level echogenicity
+
+The organ analysis uses Pillow, NumPy, SciPy, and scikit-image plus a custom chi-squared distance implementation.
+
+Verified processing steps are:
+
+1. Decode RGB labels by exact color matching.
+2. Select the organ mask.
+3. Erode the binary mask with a `5 x 5` all-ones structuring element using `scipy.ndimage.morphology.binary_erosion`.
+4. Extract image values inside the eroded mask.
+5. Create a 50-bin NumPy histogram over the fixed range `[0, 255]` with `density=False`, then divide by its total so each image histogram sums to one.
+6. Keep real patches whose pre-erosion organ area is at least the minimum real-organ area. Keep generated patches whose area is at least the mean real-organ area.
+7. Compute all real--real and all real--generated histogram pairs; the real--real distribution includes self-comparisons.
+
+The custom distance is:
 
 ```text
-method,stage,checkpoint,split,denoising_steps,metric,organ,score
+d(A, B) = 0.5 * sum((A_i - B_i)^2 / (A_i + B_i))
 ```
 
-Also record the evaluator version, random seed where applicable, number of samples, excluded samples and reasons, and confidence interval or aggregation procedure.
-
-## Pending exact details
-
-The following paper-specific values should be filled before publication:
-
-- `TODO`: exact test-set sample count.
-- `TODO`: metric package/library versions.
-- `TODO`: LPIPS/FID/KID feature extractors and preprocessing.
-- `TODO`: SSIM window and data range.
-- `TODO`: mIoU class mapping and absent-class handling.
-- `TODO`: histogram bins and chi-squared implementation.

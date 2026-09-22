@@ -1,6 +1,6 @@
 # Abdominal Ultrasound Simulation from Semantic Labels Using Paired Label-to-Physics-Based Image Translation
 
-Reproducibility resources for the paper by Santiago Vitale, Duilio Esteban Deangeli, Ignacio Larrabide, and Jose Ignacio Orlando.
+Reproducibility resources for the paper "Abdominal Ultrasound Simulation from Semantic Labels Using Paired Label-to-Physics-Based Image Translation" by Santiago Vitale, Duilio Esteban Deangeli, Ignacio Larrabide, and Jose Ignacio Orlando.
 
 **Journal:** Annals of Biomedical Engineering<br>
 **Status:** Under review<br>
@@ -17,11 +17,7 @@ The original CT datasets used in this study are publicly available from:
 
 The processed dataset used in the paper is available from [Kaggle](https://www.kaggle.com/datasets/ignaciorlando/ussimandsegm). This repository does not redistribute data subject to the terms of use of the original datasets.
 
-Download the processed data separately and keep it outside this repository unless its license permits redistribution. The expected organization and naming conventions are described in [data/README.md](data/README.md).
-
-### Dataset splits
-
-Experiments use train, validation, and test partitions distributed with the processed Kaggle dataset. The split is performed at patient level and is documented in [data/splits/README.md](data/splits/README.md).
+The expected organization and naming conventions are described in [data/README.md](data/README.md).
 
 ## Reproduction resources
 
@@ -69,24 +65,10 @@ The evaluation protocol covers MAE, MSE, PSNR, SSIM, mIoU, LPIPS, FID, KID, and 
 
 ## Hardware and software
 
-The reported experiments were performed with Ubuntu 18.04.6 LTS, an Intel Core i7-10700K CPU, 16 GB RAM, an NVIDIA Quadro P6000 with 24 GB VRAM, and PyTorch 2.0.1. Additional dependency versions and environment details should be added as they are finalized.
-
-## Reproducibility status
-
-Files currently included in this repository are documentation and reproducibility artifacts. Values marked `TODO` identify details that should be filled from the experiment logs before publication. Representative images and the final Kaggle version/count record should be added without committing the original restricted CT datasets.
-
-Additional implementation details may be provided by the corresponding author upon reasonable request.
+The reported experiments were performed with Ubuntu 18.04.6 LTS, an Intel Core i7-10700K CPU, 16 GB RAM, an NVIDIA Quadro P6000 with 24 GB VRAM, and PyTorch 2.0.1. 
 
 ## Citation
 
-```bibtex
-@article{vitale2026abdominal,
-  title   = {Abdominal Ultrasound Simulation from Semantic Labels Using Paired Label-to-Physics-Based Image Translation},
-  author  = {Vitale, Santiago and Deangeli, Duilio Esteban and Larrabide, Ignacio and Orlando, Jose Ignacio},
-  journal = {Annals of Biomedical Engineering},
-  year    = {2026},
-  note    = {Under review}
-}
-```
+Coming soon. 
 
-For questions about the repository or additional implementation details, contact the corresponding author.
+For questions about the repository or additional implementation details, contact the [corresponding author]{santiago.vitale@pladema.exa.unicen.edu.ar}.

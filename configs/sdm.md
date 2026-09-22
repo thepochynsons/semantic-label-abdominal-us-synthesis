@@ -1,5 +1,8 @@
 # Semantic Diffusion Model configuration
 
+> **Implementation repository.** The SDM implementation used for these experiments was adapted from
+> [david-stojanovski/echo_from_noise](https://github.com/david-stojanovski/echo_from_noise).
+
 The Semantic Diffusion Model (SDM) is the diffusion-based Stage I model. A semantic map conditions an ADM-style U-Net through SPADE-like group-normalization layers.
 
 ## Experiment configuration
@@ -49,6 +52,5 @@ Class-index masks are converted into 16-channel one-hot tensors. No instance-edg
 - Random cropping is disabled.
 - Paired horizontal flipping is enabled with probability `0.5` during training.
 - The training loader shuffles samples and drops the last incomplete batch.
-
 
 
