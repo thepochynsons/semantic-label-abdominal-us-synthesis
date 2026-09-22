@@ -6,14 +6,14 @@ Reproducibility resources for the paper by Santiago Vitale, Duilio Esteban Deang
 **Status:** Under review<br>
 **Code:** The complete source code is not distributed because of project-related restrictions.
 
-This repository contains the data description, patient-level split information, model configurations, representative inputs and outputs, and evaluation instructions needed to inspect and reproduce the main experimental procedures reported in the paper.
+This repository contains the data description, the organization of the official dataset splits, model configurations, representative inputs and outputs, and evaluation instructions needed to inspect and reproduce the main experimental procedures reported in the paper.
 
 ## Data
 
 The original CT datasets used in this study are publicly available from:
 
-- [VISCERAL Anatomy3 Challenge](https://www.visceral.eu/)
-- [IRCAD dataset](https://www.ircad.fr/research/3d-ircadb-01/)
+- [VISCERAL Anatomy3](https://visceral.eu/closed-benchmarks/anatomy3/)
+- [IRCAD 3D-IRCADb-01 liver segmentation dataset](https://www.ircad.fr/research-and-development/data-sets/liver-segmentation-3d-ircadb-01/)
 
 The processed dataset used in the paper is available from [Kaggle](https://www.kaggle.com/datasets/ignaciorlando/ussimandsegm). This repository does not redistribute data subject to the terms of use of the original datasets.
 
@@ -21,7 +21,7 @@ Download the processed data separately and keep it outside this repository unles
 
 ### Dataset splits
 
-Experiments use patient/volume-level train, validation, and test partitions. All 2D samples derived from one CT volume must remain in the same partition to prevent leakage. The split manifest format is documented in [data/splits/README.md](data/splits/README.md).
+Experiments use train, validation, and test partitions distributed with the processed Kaggle dataset. The split is performed at patient level and is documented in [data/splits/README.md](data/splits/README.md).
 
 ## Reproduction resources
 
@@ -36,7 +36,7 @@ Experiments use patient/volume-level train, validation, and test partitions. All
 │   ├── README.md
 │   ├── splits/
 │   │   ├── README.md
-│   │   └── split_template.csv
+│   │   └── README.md
 │   ├── test_labels/
 │   └── test_references/
 ├── docs/
@@ -73,7 +73,7 @@ The reported experiments were performed with Ubuntu 18.04.6 LTS, an Intel Core i
 
 ## Reproducibility status
 
-Files currently included in this repository are documentation and reproducibility artifacts. Values marked `TODO` identify details that should be filled from the experiment logs before publication. Representative images and final split manifests should be added without committing the original restricted CT datasets.
+Files currently included in this repository are documentation and reproducibility artifacts. Values marked `TODO` identify details that should be filled from the experiment logs before publication. Representative images and the final Kaggle version/count record should be added without committing the original restricted CT datasets.
 
 Additional implementation details may be provided by the corresponding author upon reasonable request.
 

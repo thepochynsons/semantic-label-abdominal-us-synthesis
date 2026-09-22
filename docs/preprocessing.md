@@ -27,7 +27,7 @@ Complete the following fields from the preprocessing implementation or experimen
 
 ## Leakage prevention
 
-Preprocessing must preserve the patient/volume split. Any operation that estimates statistics, fits a transform, or generates paired samples must be applied without allowing test-volume information to influence training or model selection. The split manifest in `data/splits/` is the authoritative partition record.
+Preprocessing must preserve the patient/volume split. Any operation that estimates statistics, fits a transform, or generates paired samples must be applied without allowing test-volume information to influence training or model selection. The `train/`, `validation/`, and `test/` directories distributed with the Kaggle dataset are the authoritative partition record, and the patient identifier in each filename must remain associated with its original split.
 
 ## File naming
 
