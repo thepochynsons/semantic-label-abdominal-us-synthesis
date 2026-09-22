@@ -1,5 +1,7 @@
 # Abdominal Ultrasound Simulation from Semantic Labels Using Paired Label-to-Physics-Based Image Translation
 
+<img src='teaser.png' align="center">
+
 Reproducibility resources for the paper "Abdominal Ultrasound Simulation from Semantic Labels Using Paired Label-to-Physics-Based Image Translation" by Santiago Vitale, Duilio Esteban Deangeli, Ignacio Larrabide, and Jose Ignacio Orlando.
 
 **Journal:** Annals of Biomedical Engineering<br>
